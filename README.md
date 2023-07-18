@@ -23,7 +23,8 @@ package main
 import "github.com/d0x7/go-interval-notation"
 
 func main() {
-  IntervalNotation.InRange("[v1,v2]", "v1.5.3") // == true
+  interval_notation.InRange("[v1,v2]", "v1.5.3") // == true
+  interval_notation.InRange("[v1,v2]", "v2.5.3") // == false
 }
 ```
 
