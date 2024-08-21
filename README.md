@@ -13,14 +13,14 @@ For actually parsing the version and comparing them, it's using [SemVer from @Ma
 
 First use `go get` to import the package:
 ```bash
-go get github.com/d0x7/go-interval-notation
+go get xiam.li/interval-notation
 ```
 
 Afterwards you can use like this:
 ```go
 package main
 
-import "github.com/d0x7/go-interval-notation"
+import "xiam.li/interval-notation"
 
 func main() {
   interval_notation.InRange("[v1,v2]", "v1.5.3") // == true

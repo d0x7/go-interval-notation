@@ -1,4 +1,4 @@
-module github.com/d0x7/go-interval-notation
+module xiam.li/interval-notation
 
 go 1.20
 
