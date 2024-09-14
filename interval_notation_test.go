@@ -41,10 +41,11 @@ func testNotations(t *testing.T, tests []notationTests) {
 				for _, m := range errors {
 					t.Errorf(m.Error())
 				}
-			} else {
+			} else if IsInRange(test.intervalNotation, v) == test.expected[i] {
 				t.Logf("PASS: %s is %s like it was expected for notation %s", v, validTxt(valid), test.intervalNotation)
+			} else {
+				t.Fatalf("FAIL: IsInRange failed when testing %s for %s although previous test succeeded", test.intervalNotation, v)
 			}
-
 		}
 	}
 }

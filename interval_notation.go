@@ -54,11 +54,11 @@ func Parse(interval string) (*semver.Constraints, error) {
 		}
 	case leftSet && leftInclusive:
 		constraint = fmt.Sprintf(">= %s", left)
-	case leftSet && !leftInclusive:
+	case leftSet:
 		constraint = fmt.Sprintf("> %s", left)
 	case rightSet && rightInclusive:
 		constraint = fmt.Sprintf("<= %s", right)
-	case rightSet && !rightInclusive:
+	case rightSet:
 		constraint = fmt.Sprintf("< %s", right)
 	}
 	verConstraint, err := semver.NewConstraint(constraint)
@@ -81,4 +81,9 @@ func InRange(intervalNotation, version string) (bool, []error) {
 	}
 
 	return constraint.Validate(v)
+}
+
+func IsInRange(intervalNotation, version string) bool {
+	inRange, _ := InRange(intervalNotation, version)
+	return inRange
 }
