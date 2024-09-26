@@ -9,6 +9,14 @@ import (
 
 var validationRegex = regexp.MustCompile(`(?P<leftBrace>[(\]\[])(?P<first>v?[0-9a-zA-Z.+-]*?)(?P<delimiter>,)?(?P<second>v?[0-9a-zA-Z.+-]*?)(?P<rightBrace>[)\]\[])`)
 
+func MustParse(interval string) *semver.Constraints {
+	constraint, err := Parse(interval)
+	if err != nil {
+		panic(err)
+	}
+	return constraint
+
+}
 func Parse(interval string) (*semver.Constraints, error) {
 	match := validationRegex.FindStringSubmatch(interval)
 	if match == nil || len(match) != 6 || (match[validationRegex.SubexpIndex("first")] == "" && match[validationRegex.SubexpIndex("second")] == "") {
