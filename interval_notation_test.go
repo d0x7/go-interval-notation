@@ -26,6 +26,7 @@ func testNotations(t *testing.T, tests []notationTests) {
 		constraint, err := Parse(test.intervalNotation)
 		if err != nil {
 			t.Errorf("Error parsing interval: %v", err)
+			continue
 		}
 
 		for i, v := range test.version {
@@ -58,6 +59,7 @@ func TestLeftSetOnly(t *testing.T) {
 		{"[1.2.3,)", []string{"1.2.3", "1.2.4", "1.3.0", "2.0.0"}, []bool{true, true, true, true}},
 		{"[1.2.3,]", []string{"1.2.3", "1.2.4", "1.3.0", "2.0.0"}, []bool{true, true, true, true}},
 		{"[1.2.3)", []string{"1.2.3", "1.2.4", "1.3.0", "2.0.0"}, []bool{true, false, false, false}},
+		{"[1.2.3,   ]", []string{"1.2.3", "1.2.4", "1.3.0", "2.0.0"}, []bool{true, true, true, true}},
 	}
 	testNotations(t, tests)
 }
@@ -70,6 +72,7 @@ func TestRightSetOnly(t *testing.T) {
 		{"[,1.2.3)", []string{"1.2.3", "1.2.4", "1.0.0", "1.1.3"}, []bool{false, false, true, true}},
 		{"[,1.2.3]", []string{"1.2.3", "1.2.4", "1.0.0", "1.1.3"}, []bool{true, false, true, true}},
 		{"[1.2.3)", []string{"1.2.3", "1.2.4", "1.3.0", "2.0.0"}, []bool{true, false, false, false}},
+		{"[   ,1.2.3]", []string{"1.2.3", "1.2.4", "1.0.0", "1.1.3"}, []bool{true, false, true, true}},
 	}
 	testNotations(t, tests)
 }
@@ -80,6 +83,7 @@ func TestLeftAndRightSet(t *testing.T) {
 		{"(1.2.3,1.3.5]", []string{"1.2.3", "1.2.4", "1.2.5", "1.3.5"}, []bool{false, true, true, true}},
 		{"[1.2.3,1.3.5)", []string{"1.2.3", "1.2.4", "1.2.5", "1.3.5"}, []bool{true, true, true, false}},
 		{"[1.2.3,1.3.5]", []string{"1.2.3", "1.2.4", "1.2.5", "1.3.5"}, []bool{true, true, true, true}},
+		{"[1.2.3   ,   1.3.5]", []string{"1.2.3", "1.2.4", "1.2.5", "1.3.5"}, []bool{true, true, true, true}},
 	}
 	testNotations(t, tests)
 }
@@ -106,6 +110,9 @@ func TestWithVersionPrefix(t *testing.T) {
 		{"(v1.3.5,]", []string{"1.2.3", "v1.5.4", "1.2.5", "1.3.5"}, []bool{false, true, false, false}},
 		{"[v1.3.5,)", []string{"1.2.3", "v1.5.4", "2.0.0", "1.3.5"}, []bool{false, true, true, true}},
 		{"[v1.3.5,]", []string{"1.2.3", "v1.5.4", "2.0.0", "1.3.5"}, []bool{false, true, true, true}},
+		{"[v1.2.3   ,   v1.3.5]", []string{"1.2.3", "v1.2.4", "1.2.5", "1.3.5"}, []bool{true, true, true, true}},
+		{"[v1.3.5,   ]", []string{"1.2.3", "v1.5.4", "2.0.0", "1.3.5"}, []bool{false, true, true, true}},
+		{"[   ,v1.3.5]", []string{"1.2.3", "v1.2.4", "1.2.5", "1.3.5"}, []bool{true, true, true, true}},
 	}
 	testNotations(t, tests)
 }
